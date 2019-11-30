@@ -6,106 +6,106 @@ using namespace std;
 
 void InputArray(Array  arr[])
 {
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < m; j++)
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < columns; j++)
         {
             cout << "[" << i + 1 << "][" << j + 1 << "] = ";
-            cin >> arr[i].dArr[j];
+            cin >> arr[i].arr2[j];
         }
 }
 void OutputArray(Array  arr[])
 {
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < rows; i++)
     {
-        for (int j = 0; j < m; j++)
+        for (int j = 0; j < columns; j++)
         {
-            cout << arr[i].dArr[j] << "\t";
+            cout << arr[i].arr2[j] << "\t";
         }
         cout << endl;
     }
 }
-void SortArray(Array  arr[], int n)
+void SortColumnsByMergingInDescending(Array  arr[], int rows)
 {
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < rows; i++)
     {
-        for (int BlockSizeIterator = 1; BlockSizeIterator < n; BlockSizeIterator *= 2)
+        for (int blockSizeIterator = 1; blockSizeIterator < rows; blockSizeIterator *= 2)
         {
-            for (int BlockIterator = 0; BlockIterator < n - BlockSizeIterator; BlockIterator += 2 * BlockSizeIterator)
+            for (int blockIterator = 0; blockIterator < rows - blockSizeIterator; blockIterator += 2 * blockSizeIterator)
             {
-                int LeftBlockIterator = 0;
-                int RightBlockIterator = 0;
-                int LeftBorder = BlockIterator;
-                int MidBorder = BlockIterator + BlockSizeIterator;
-                int RightBorder = BlockIterator + 2 * BlockSizeIterator;
-                RightBorder = (RightBorder < n) ? RightBorder : n;
-                int* SortedBlock = new int[RightBorder - LeftBorder];
+                int leftBlockIterator = 0;
+                int rightBlockIterator = 0;
+                int leftBorder = blockIterator;
+                int midBorder = blockIterator + blockSizeIterator;
+                int rightBorder = blockIterator + 2 * blockSizeIterator;
+                rightBorder = (rightBorder < rows) ? rightBorder : rows;
+                int* sortedBlock = new int[rightBorder - leftBorder];
 
-                while (LeftBorder + LeftBlockIterator < MidBorder && MidBorder + RightBlockIterator < RightBorder)
+                while (leftBorder + leftBlockIterator < midBorder && midBorder + rightBlockIterator < rightBorder)
                 {
-                    if (arr[LeftBorder + LeftBlockIterator].dArr[i] > arr[MidBorder + RightBlockIterator].dArr[i])
+                    if (arr[leftBorder + leftBlockIterator].arr2[i] > arr[midBorder + rightBlockIterator].arr2[i])
                     {
-                        SortedBlock[LeftBlockIterator + RightBlockIterator] = arr[LeftBorder + LeftBlockIterator].dArr[i];
-                        LeftBlockIterator++;
+                        sortedBlock[leftBlockIterator + rightBlockIterator] = arr[leftBorder + leftBlockIterator].arr2[i];
+                        leftBlockIterator++;
                     }
                     else
                     {
-                        SortedBlock[LeftBlockIterator + RightBlockIterator] = arr[MidBorder + RightBlockIterator].dArr[i];
-                        RightBlockIterator++;
+                        sortedBlock[leftBlockIterator + rightBlockIterator] = arr[midBorder + rightBlockIterator].arr2[i];
+                        rightBlockIterator++;
                     }
                 }
-                while (LeftBorder + LeftBlockIterator < MidBorder)
+                while (leftBorder + leftBlockIterator < midBorder)
                 {
-                    SortedBlock[LeftBlockIterator + RightBlockIterator] = arr[LeftBorder + LeftBlockIterator].dArr[i];
-                    LeftBlockIterator++;
+                    sortedBlock[leftBlockIterator + rightBlockIterator] = arr[leftBorder + leftBlockIterator].arr2[i];
+                    leftBlockIterator++;
                 }
-                while (MidBorder + RightBlockIterator < RightBorder)
+                while (midBorder + rightBlockIterator < rightBorder)
                 {
-                    SortedBlock[LeftBlockIterator + RightBlockIterator] = arr[MidBorder + RightBlockIterator].dArr[i];
-                    RightBlockIterator++;
+                    sortedBlock[leftBlockIterator + rightBlockIterator] = arr[midBorder + rightBlockIterator].arr2[i];
+                    rightBlockIterator++;
                 }
 
-                for (int MergeIterator = 0; MergeIterator < LeftBlockIterator + RightBlockIterator; MergeIterator++)
+                for (int mergeIterator = 0; mergeIterator < leftBlockIterator + rightBlockIterator; mergeIterator++)
                 {
-                    arr[LeftBorder + MergeIterator].dArr[i] = SortedBlock[MergeIterator];
+                    arr[leftBorder + mergeIterator].arr2[i] = sortedBlock[mergeIterator];
                 }
-                delete SortedBlock;
+                delete sortedBlock;
 
             }
 
         }
     }
 }
-void CalcArray(Array arr[])
+void CalculationofGeometricAverageofRowsandAddingthem(Array arr[])
 {
     double summ = 0.0;
-    for (int i = 0; i < (n - 1);++i)
+    for (int i = 0; i < (rows - 1);++i)
     {
-        double prod = 1;
-        for (int j = i + 1; j < n; ++j)
+        double product = 1;
+        for (int j = i + 1; j < rows; ++j)
         {
-            prod = prod * arr[i].dArr[j];
+            product = product * arr[i].arr2[j];
         }
-        double geom;
+        double geometricaverage;
 
-        double n1 = n - i - 1;
-        geom = pow(prod, (1/n1));
-        summ = summ + geom;
-        cout << "f(ryadok[" << i + 1 << "])=" << geom << endl;
+        double n1 = rows - i - 1;
+        geometricaverage = pow(product, (1/n1));
+        summ = summ + geometricaverage;
+        cout << "f(ryadok[" << i + 1 << "])=" << geometricaverage << endl;
     }
     cout << "\nF(f)=" << summ << endl;
 }
 
 int main() {
     cout << "Enter elements of matrix:\n" << endl;
-    Array arr[n];
+    Array arr[rows];
     InputArray(arr);
     cout << "\nYour matrix:\n" << endl;
     OutputArray(arr);
-    SortArray(arr, 5);
+    SortColumnsByMergingInDescending(arr, 5);
     cout << "\nSorted matrix:\n" << endl;
     OutputArray(arr);
     cout << "\nCalculations:\n" << endl;
-    CalcArray(arr);
+    CalculationofGeometricAverageofRowsandAddingthem(arr);
 
 
 
